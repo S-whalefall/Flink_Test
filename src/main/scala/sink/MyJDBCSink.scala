@@ -41,7 +41,7 @@ class MyJDBCSinkFunc extends RichSinkFunction[Worker]{
     insertStatement = conn.prepareStatement("insert into worker values (?,?)")
   }
 
-  override def invoke(value: Worker, context: SinkFunction.Context[_]): Unit = {  //这个逻辑自己后面改一下，这个是判断更新的条数为0，然后插入
+  override def invoke(value: Worker, context: SinkFunction.Context): Unit = {  //这个逻辑自己后面改一下，这个是判断更新的条数为0，然后插入
     updateStatement.setString(1,value.name)
     updateStatement.setInt(2,value.age)
     updateStatement.execute()

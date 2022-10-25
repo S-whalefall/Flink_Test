@@ -40,17 +40,17 @@ class RichMapFunctionWithState extends RichMapFunction[TrainAlarm,String]{
 
   }
 
-  override def map(value: TrainAlarm): Unit = {
-    //获取
-    tempstate.value()
-    tempstate.update(value.temp)
+//  override def map(value: TrainAlarm): Double = {
+//    //获取
+//    tempstate.value()
+//    tempstate.update(value.temp)
+//
+//    listState.add(value.temp)
+//    listState.get().iterator()
+//
+//    MapState
+//    tempstate.value()
+//  }
 
-    listState.add(value.temp)
-    listState.get().iterator()
-
-    MapState
-    tempstate.value()
-
-
-  }
+  override def map(value: TrainAlarm): String = ???
 }

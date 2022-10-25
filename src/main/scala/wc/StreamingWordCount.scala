@@ -11,7 +11,7 @@ object StreamingWordCount {
 
     //读取数据Source,host是配置的ip，port也是
 //    val inputStream = env.socketTextStream("host", port = 1314)  //运行命令nc -lk 1314
-    val inputStream = env.readTextFile("C:\\Users\\14918\\IdeaProjects\\flink-test\\src\\source1")
+    val inputStream = env.readTextFile("D:\\projects\\Flink_Test\\src\\source1")
 
     //转换操作
     val result = inputStream.flatMap(_.split(" "))

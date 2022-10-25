@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
+    <parameters>
+      <parameter value="-target:jvm-1.8" />
+    </parameters>
     <profile name="Maven 1" modules="flink-test">
       <parameters>
         <parameter value="-dependencyfile" />
@@ -10,7 +13,7 @@
     <profile name="Maven 2" modules="Flink_Test">
       <parameters>
         <parameter value="-dependencyfile" />
-        <parameter value="D:\projects\Flink\Flink_Test\target/.scala_dependencies" />
+        <parameter value="D:\projects\Flink_Test\target/.scala_dependencies" />
       </parameters>
     </profile>
   </component>

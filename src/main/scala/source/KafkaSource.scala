@@ -2,7 +2,7 @@ package source
 
 import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer09
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.kafka.clients.consumer.ConsumerConfig
 
 import java.util.Properties
@@ -16,7 +16,7 @@ object KafkaSource {
     props.setProperty(ConsumerConfig.GROUP_ID_CONFIG,"wc") //配置groupid
 
     //kafka需要：主题，groupid，序列化，prorperties    new SimpleStringSchema()是封装好的序列化方法
-    val inputStream = env.addSource(new FlinkKafkaConsumer09[String]("test", new SimpleStringSchema(), props)) //点进去FlinkKafkaConsumer09看参数，（）ctrl+alt+b
+    val inputStream = env.addSource(new FlinkKafkaConsumer[String]("test", new SimpleStringSchema(), props)) //点进去FlinkKafkaConsumer09看参数，（）ctrl+alt+b
 
     inputStream.print()
 

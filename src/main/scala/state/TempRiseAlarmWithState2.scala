@@ -37,7 +37,7 @@ class TempRiseWithTime extends KeyedProcessFunction[String,TrainAlarm,String]{
 
   override def processElement(i: TrainAlarm, context: KeyedProcessFunction[String, TrainAlarm, String]#Context, collector: Collector[String]): Unit = {
     //如果是第一条数据，更新温度状态，注册10s后触发的定时器，并更新时间状态，个数状态设为1
-    if(tempState.value() == 0 || timerState == 0 ){
+    if(tempState.value() == 0 || timerState.value()  ==  0 ){
       tempState.update(i.temp)
       context.timerService().registerProcessingTimeTimer(i.ts *1000L + 10000L)
       countState.update(1)
