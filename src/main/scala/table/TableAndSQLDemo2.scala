@@ -1,6 +1,8 @@
 package table
 
-import org.apache.flink.table.api.{EnvironmentSettings, TableEnvironment}
+import org.apache.flink.table.api._
+import org.apache.flink.table.api.Expressions._
+
 
 object TableAndSQLDemo2 {
   def main(args: Array[String]): Unit = {
@@ -12,7 +14,7 @@ object TableAndSQLDemo2 {
 
     val tEnv = TableEnvironment.create(settings)
 
-    //输入数据对接kafka
+    //创建输入数据对接kafka，（都是用connect连接的）
     tEnv.executeSql(
       """
         |create table t_name_from(
@@ -34,7 +36,7 @@ object TableAndSQLDemo2 {
     //输出数据对接kafka（）要有主键，避免插入重复？
     tEnv.executeSql(
       """
-        |create table t_name_to(
+        |create table t_name_to (
         | field1 type,
         | field2 type,
         | field3 type,

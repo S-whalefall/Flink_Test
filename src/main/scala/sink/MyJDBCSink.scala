@@ -1,7 +1,9 @@
 package sink
 
 import bean.Worker
-import com.mysql.jdbc.{Connection, PreparedStatement}
+
+import java.sql.Connection
+//import com.mysql.jdbc.{Connection, PreparedStatement}
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.runtime.operators.Driver
 import org.apache.flink.streaming.api.functions.sink.{RichSinkFunction, SinkFunction}
