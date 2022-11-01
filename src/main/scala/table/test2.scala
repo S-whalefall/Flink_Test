@@ -1,7 +1,7 @@
 package table
 
 import bean.TrainAlarm
-import org.apache.flink.streaming.api.scala.{DataStream, _}
+import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment,_}
 import org.apache.flink.table.api.bridge.scala.StreamTableEnvironment
 import org.apache.flink.table.api.{EnvironmentSettings, TableEnvironment}
 
@@ -17,7 +17,7 @@ object test2 {
       .build()
 
 //    val tEnv = TableEnvironment.create(settings)
-    val tEnv = StreamTableEnvironment.create(settings)
+//    val tEnv = StreamTableEnvironment.create(settings)
 
     val dataStream: DataStream[TrainAlarm] = bsENV.readTextFile("D:\\abc\\xxx.txt").map(
       line=>{
@@ -26,6 +26,6 @@ object test2 {
       }
     )
 
-    val table = tEnv.fromDataStream(dataStream,"asd,asdsa,asdasda")
+//    val table = tEnv.fromDataStream(dataStream,"asd,asdsa,asdasda")
   }
 }

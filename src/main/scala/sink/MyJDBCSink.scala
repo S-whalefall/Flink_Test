@@ -2,14 +2,11 @@ package sink
 
 import bean.Worker
 
-import java.sql.Connection
-//import com.mysql.jdbc.{Connection, PreparedStatement}
+import java.sql.{Connection, PreparedStatement}
 import org.apache.flink.configuration.Configuration
-import org.apache.flink.runtime.operators.Driver
 import org.apache.flink.streaming.api.functions.sink.{RichSinkFunction, SinkFunction}
 import org.apache.flink.streaming.api.scala._
 
-import java.sql
 import java.sql.DriverManager
 
 object MyJDBCSink {
@@ -32,10 +29,8 @@ object MyJDBCSink {
 class MyJDBCSinkFunc extends RichSinkFunction[Worker]{
 
   var conn : Connection = _
-  var updateStatement : sql.PreparedStatement = _
-  var insertStatement : sql.PreparedStatement = _
-//  var updateStatement : PreparedStatement = _
-//  var insertStatement : PreparedStatement = _
+  var updateStatement : PreparedStatement = _
+  var insertStatement : PreparedStatement = _
 
   override def open(parameters: Configuration): Unit = { //连接mysql
     val conn = DriverManager.getConnection("", "", "")
