@@ -4,7 +4,7 @@ package broadcast_join
 import com.alibaba.fastjson.JSON
 import org.apache.flink.api.common.state.{MapStateDescriptor, ReadOnlyBroadcastState}
 import org.apache.flink.configuration.Configuration
-import org.apache.flink.streaming.api.datastream.BroadcastStream
+import org.apache.flink.streaming.api.datastream.{BroadcastStream, DataStreamSink}
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction
 import org.apache.flink.streaming.api.functions.source.{RichParallelSourceFunction, SourceFunction}
 import org.apache.flink.streaming.api.scala._
@@ -32,7 +32,7 @@ object BroadCastDemo {
     val dataInfoDS: DataStream[String] = env.socketTextStream("master", 666)
 
     //两个流进行connect操作
-    dataInfoDS.connect(broadCastStream)
+    var value: DataStreamSink[UserVisitInfo] = dataInfoDS.connect(broadCastStream)
       .process(new MyBroadcastFunc) //这个process里面有两个流分别的处理
       .print()
 
