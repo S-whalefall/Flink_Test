@@ -14,7 +14,7 @@ import java.lang
 import java.util.Properties
 /*
 * 状态一致性
-*
+*如何保证状态一致性：checkpoint+两阶段提交
 * */
 object End2EndExactlyDemoOnce {
   def main(args: Array[String]): Unit = {

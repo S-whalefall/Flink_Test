@@ -16,7 +16,7 @@ object TempSideOutput {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     env.setParallelism(1)
 
-    val high = new OutputTag[TrainAlarm]("high")
+    val high = new OutputTag[TrainAlarm]("high")  //测输出流，OutputTag一个输出标记
 
     val result = env.socketTextStream("master", 666)
       .map(line => {

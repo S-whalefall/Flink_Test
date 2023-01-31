@@ -14,18 +14,21 @@ import java.sql
 import java.sql.{DriverManager, PreparedStatement}
 
 
-
+/*
+* 算子状态里的广播状态，
+* */
 object BroadCastDemo {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
 
     //定义为 KV ，一方面是为了广播的时候定义为map，另一方面是为了做关联操作
-    val userBaseDS: DataStream[(Long, BaseUserInfo)] = env.addSource(new UserSourceFunc)    //从数据库获取到流
-      .map(user => (user.id, user))
+    val userBaseDS: DataStream[(Long, BaseUserInfo)] =
+      env.addSource(new UserSourceFunc)    //从数据库获取到流
+        .map(user => (user.id, user))      //将获取到的数据变为map键值对
 
     val mapStateDes = new MapStateDescriptor[Long, BaseUserInfo]("mapState", classOf[Long], classOf[BaseUserInfo])   //定义一个map状态描述器
 
-    val broadCastStream: BroadcastStream[(Long, BaseUserInfo)] = userBaseDS.broadcast(mapStateDes)   //将数据库里的信息广播到状态描述器里
+    val broadCastStream: BroadcastStream[(Long, BaseUserInfo)] = userBaseDS.broadcast(mapStateDes)   //将数据库里的信息广播到状态描述器里，现在这个是广播流
 
 
     //下面是获取正常的流数据
@@ -48,7 +51,7 @@ case class BaseUserInfo(id:Long,name:String,age:Int,city:String,phone:Long )
 case class UserVisitInfo(id:Long,name:String,city:String,behavior: String,phone:Long )
 
 //实现广播ProcessFunction   String是端口获取的数据流，（L，B）是数据库的状态数据， UserVisitInfo是processFunc运行完后输出的数据类型
-class MyBroadcastFunc extends BroadcastProcessFunction[String,(Long,BaseUserInfo),UserVisitInfo]{
+class MyBroadcastFunc extends BroadcastProcessFunction[String,(Long,BaseUserInfo),UserVisitInfo]{//(in,in,out)
   /*
   * 处理逻辑，将广播流中的每个值，写到状态里，然后将这个状态给日志流的数去调用
   * */
@@ -65,27 +68,23 @@ class MyBroadcastFunc extends BroadcastProcessFunction[String,(Long,BaseUserInfo
     val userInfo = mapState.get(use_id)  //获取用户对应在数据库中的信息
 
     out.collect(UserVisitInfo(use_id,userInfo.name,userInfo.city,behavior,url))   //把需要的字段用collect进行拼接收集
-
-
-
   }
 
   //处理的广播流中的每个值
   override def processBroadcastElement(value: (Long, BaseUserInfo), ctx: BroadcastProcessFunction[String, (Long, BaseUserInfo), UserVisitInfo]#Context, out: Collector[UserVisitInfo]): Unit = {
 
-
   }
 }
 
 //实现获取数据库的用户信息
-class UserSourceFunc extends RichParallelSourceFunction[BaseUserInfo]{
+class UserSourceFunc extends RichParallelSourceFunction[BaseUserInfo]{  //丰富的并行源函数
 
   var conn:sql.Connection = _
-  var statement :PreparedStatement = _
+  var statement :PreparedStatement = _   //这个状态就相当于存储值的中间变量，（存储很多的值，一个集合一样的东西）
   var flag:Boolean = true
 
 
-  override def open(parameters: Configuration): Unit = {
+  override def open(parameters: Configuration): Unit = {      //定义连接器，和你需要查询出的sql语句
     conn = DriverManager.getConnection("","","")
     statement = conn.prepareStatement("xxxx")
   }
@@ -100,7 +99,7 @@ class UserSourceFunc extends RichParallelSourceFunction[BaseUserInfo]{
         val age = resultSet.getInt(3)
         val city = resultSet.getString(4)
         val phone = resultSet.getLong(5)
-        sourceContext.collect(BaseUserInfo(id , name , age , city , phone))
+        sourceContext.collect(BaseUserInfo(id , name , age , city , phone))   //获取之后用sourceContext将信息传出
       }
     }
 
